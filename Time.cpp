@@ -7,7 +7,7 @@
 
 using namespace std;
 
-// --- вспомогательные методы ---
+// --- РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Рµ РјРµС‚РѕРґС‹ ---
 
 void Time::copyReminder(const char* r) {
     delete[] reminder;
@@ -15,24 +15,24 @@ void Time::copyReminder(const char* r) {
     if (r) {
         size_t len = std::strlen(r);
         reminder = new char[len + 1];
-        std::memcpy(reminder, r, len + 1); // копируем строку вместе с '\0'
+        std::memcpy(reminder, r, len + 1); // РєРѕРїРёСЂСѓРµРј СЃС‚СЂРѕРєСѓ РІРјРµСЃС‚Рµ СЃ '\0'
     }
     else {
         reminder = nullptr;
     }
 }
 
-// ТВОЯ функция проверки
+// РўР’РћРЇ С„СѓРЅРєС†РёСЏ РїСЂРѕРІРµСЂРєРё
 void Time::ValidateTime(int h, int m, int s) {
     if (h < 0 || h > 23)
-        throw std::invalid_argument("Часы должны быть в диапазоне от 0 до 23");
+        throw std::invalid_argument("Р§Р°СЃС‹ РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ РІ РґРёР°РїР°Р·РѕРЅРµ РѕС‚ 0 РґРѕ 23");
     if (m < 0 || m > 59)
-        throw std::invalid_argument("Минуты должны быть в диапазоне от 0 до 59");
+        throw std::invalid_argument("РњРёРЅСѓС‚С‹ РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ РІ РґРёР°РїР°Р·РѕРЅРµ РѕС‚ 0 РґРѕ 59");
     if (s < 0 || s > 59)
-        throw std::invalid_argument("Секунды должны быть в диапазоне от 0 до 59");
+        throw std::invalid_argument("РЎРµРєСѓРЅРґС‹ РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ РІ РґРёР°РїР°Р·РѕРЅРµ РѕС‚ 0 РґРѕ 59");
 }
 
-// --- конструкторы/деструктор/присваивание ---
+// --- РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹/РґРµСЃС‚СЂСѓРєС‚РѕСЂ/РїСЂРёСЃРІР°РёРІР°РЅРёРµ ---
 
 Time::Time()
     : hours(0), minutes(0), seconds(0), reminder(nullptr) {
@@ -80,10 +80,10 @@ Time::~Time() {
     delete[] reminder;
 }
 
-// --- сеттеры / геттеры ---
+// --- СЃРµС‚С‚РµСЂС‹ / РіРµС‚С‚РµСЂС‹ ---
 
 void Time::SetHours(int h) {
-    // проверяем все компоненты времени
+    // РїСЂРѕРІРµСЂСЏРµРј РІСЃРµ РєРѕРјРїРѕРЅРµРЅС‚С‹ РІСЂРµРјРµРЅРё
     ValidateTime(h, minutes, seconds);
     hours = h;
 }
@@ -107,7 +107,7 @@ int Time::GetMinutes() const { return minutes; }
 int Time::GetSeconds() const { return seconds; }
 const char* Time::GetReminder() const { return reminder; }
 
-// --- вывод ---
+// --- РІС‹РІРѕРґ ---
 
 void Time::Print() const {
     cout << (hours < 10 ? "0" : "") << hours << ":"
@@ -120,7 +120,7 @@ void Time::Print() const {
 }
 
 
-// --- сравнение ---
+// --- СЃСЂР°РІРЅРµРЅРёРµ ---
 
 bool Time::operator<(const Time& other) const {
     if (hours != other.hours)   return hours < other.hours;
@@ -145,7 +145,7 @@ bool Time::operator==(const Time& other) const {
     return std::strcmp(reminder, other.reminder) == 0;
 }
 
-// --- сериализация / десериализация ---
+// --- СЃРµСЂРёР°Р»РёР·Р°С†РёСЏ / РґРµСЃРµСЂРёР°Р»РёР·Р°С†РёСЏ ---
 
 
 
@@ -183,12 +183,12 @@ void Time::deserialize(istream& is) {
     is.read(reinterpret_cast<char*>(&minutes), sizeof(minutes));
     is.read(reinterpret_cast<char*>(&seconds), sizeof(seconds));
 
-    // можно оставить проверку корректности времени:
+    // РјРѕР¶РЅРѕ РѕСЃС‚Р°РІРёС‚СЊ РїСЂРѕРІРµСЂРєСѓ РєРѕСЂСЂРµРєС‚РЅРѕСЃС‚Рё РІСЂРµРјРµРЅРё:
     ValidateTime(hours, minutes, seconds);
 }
 
 
-// --- оператор вывода ---
+// --- РѕРїРµСЂР°С‚РѕСЂ РІС‹РІРѕРґР° ---
 
 ostream& operator<<(ostream& os, const Time& t) {
     os << (t.hours < 10 ? "0" : "") << t.hours << ":"
@@ -197,12 +197,12 @@ ostream& operator<<(ostream& os, const Time& t) {
 
     os << " - ";
     if (t.reminder) os << t.reminder;
-    else            os << "(нет напоминания)";
+    else            os << "(РЅРµС‚ РЅР°РїРѕРјРёРЅР°РЅРёСЏ)";
 
     return os;
 }
 
-// --- оператор ввода ---
+// --- РѕРїРµСЂР°С‚РѕСЂ РІРІРѕРґР° ---
 
 istream& operator>>(istream& is, Time& t) {
     using std::numeric_limits;
@@ -210,37 +210,37 @@ istream& operator>>(istream& is, Time& t) {
 
     int h, m, s;
 
-    cout << "Введите часы (0-23): ";
+    cout << "Р’РІРµРґРёС‚Рµ С‡Р°СЃС‹ (0-23): ";
     if (!(is >> h)) {
         is.clear();
         is.ignore(numeric_limits<streamsize>::max(), '\n');
-        throw invalid_argument("Некорректный ввод времени: часы должны быть целым числом.");
+        throw invalid_argument("РќРµРєРѕСЂСЂРµРєС‚РЅС‹Р№ РІРІРѕРґ РІСЂРµРјРµРЅРё: С‡Р°СЃС‹ РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ С†РµР»С‹Рј С‡РёСЃР»РѕРј.");
     }
 
-    cout << "Введите минуты (0-59): ";
+    cout << "Р’РІРµРґРёС‚Рµ РјРёРЅСѓС‚С‹ (0-59): ";
     if (!(is >> m)) {
         is.clear();
         is.ignore(numeric_limits<streamsize>::max(), '\n');
-        throw invalid_argument("Некорректный ввод времени: минуты должны быть целым числом.");
+        throw invalid_argument("РќРµРєРѕСЂСЂРµРєС‚РЅС‹Р№ РІРІРѕРґ РІСЂРµРјРµРЅРё: РјРёРЅСѓС‚С‹ РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ С†РµР»С‹Рј С‡РёСЃР»РѕРј.");
     }
 
-    cout << "Введите секунды (0-59): ";
+    cout << "Р’РІРµРґРёС‚Рµ СЃРµРєСѓРЅРґС‹ (0-59): ";
     if (!(is >> s)) {
         is.clear();
         is.ignore(numeric_limits<streamsize>::max(), '\n');
-        throw invalid_argument("Некорректный ввод времени: секунды должны быть целым числом.");
+        throw invalid_argument("РќРµРєРѕСЂСЂРµРєС‚РЅС‹Р№ РІРІРѕРґ РІСЂРµРјРµРЅРё: СЃРµРєСѓРЅРґС‹ РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ С†РµР»С‹Рј С‡РёСЃР»РѕРј.");
     }
 
-    // тут уже проверяем диапазон
+    // С‚СѓС‚ СѓР¶Рµ РїСЂРѕРІРµСЂСЏРµРј РґРёР°РїР°Р·РѕРЅ
     t.ValidateTime(h, m, s);
 
     t.hours = h;
     t.minutes = m;
     t.seconds = s;
 
-    // читаем напоминание
+    // С‡РёС‚Р°РµРј РЅР°РїРѕРјРёРЅР°РЅРёРµ
     is.ignore(numeric_limits<streamsize>::max(), '\n');
-    cout << "Введите напоминание: ";
+    cout << "Р’РІРµРґРёС‚Рµ РЅР°РїРѕРјРёРЅР°РЅРёРµ: ";
     std::string note;
     std::getline(is, note);
     t.SetReminder(note.c_str());
