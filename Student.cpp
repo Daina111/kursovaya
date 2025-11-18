@@ -7,10 +7,10 @@ using namespace std;
 
 void Student::ValidateData(int a, double g) {
     if (a < 0 || a > 120) {
-        throw invalid_argument("Возраст должен быть в диапазоне 0–120.");
+        throw invalid_argument("Р’РѕР·СЂР°СЃС‚ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РІ РґРёР°РїР°Р·РѕРЅРµ 0вЂ“120.");
     }
     if (g < 0.0 || g > 5.0) {
-        throw invalid_argument("Средний балл должен быть в диапазоне 0–5.");
+        throw invalid_argument("РЎСЂРµРґРЅРёР№ Р±Р°Р»Р» РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РІ РґРёР°РїР°Р·РѕРЅРµ 0вЂ“5.");
     }
 }
 
@@ -39,9 +39,9 @@ bool Student::operator==(const Student& other) const {
 }
 
 ostream& operator<<(ostream& os, const Student& student) {
-    os << "Студент: " << student.name
-        << ", Возраст: " << student.age
-        << ", Средний балл: " << student.averageGrade;
+    os << "РЎС‚СѓРґРµРЅС‚: " << student.name
+        << ", Р’РѕР·СЂР°СЃС‚: " << student.age
+        << ", РЎСЂРµРґРЅРёР№ Р±Р°Р»Р»: " << student.averageGrade;
     return os;
 }
 
@@ -49,62 +49,62 @@ istream& operator>>(istream& is, Student& student) {
     using std::numeric_limits;
     using std::streamsize;
 
-    cout << "Введите имя: ";
+    cout << "Р’РІРµРґРёС‚Рµ РёРјСЏ: ";
     getline(is >> ws, student.name);
 
     string ageStr, gradeStr;
 
-    cout << "Введите возраст: ";
+    cout << "Р’РІРµРґРёС‚Рµ РІРѕР·СЂР°СЃС‚: ";
     is >> ageStr;
 
-    cout << "Введите средний балл: ";
+    cout << "Р’РІРµРґРёС‚Рµ СЃСЂРµРґРЅРёР№ Р±Р°Р»Р»: ";
     is >> gradeStr;
 
     int age;
     double grade;
 
-    // --- разбираем возраст ---
+    // --- СЂР°Р·Р±РёСЂР°РµРј РІРѕР·СЂР°СЃС‚ ---
     {
         stringstream ss(ageStr);
         if (!(ss >> age)) {
             throw invalid_argument(
-                "Некорректный ввод данных студента: возраст должен быть целым числом."
+                "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Р№ РІРІРѕРґ РґР°РЅРЅС‹С… СЃС‚СѓРґРµРЅС‚Р°: РІРѕР·СЂР°СЃС‚ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ С†РµР»С‹Рј С‡РёСЃР»РѕРј."
             );
         }
 
         char extra;
-        if (ss >> extra) {  // смогли прочитать что-то ещё после числа
+        if (ss >> extra) {  // СЃРјРѕРіР»Рё РїСЂРѕС‡РёС‚Р°С‚СЊ С‡С‚Рѕ-С‚Рѕ РµС‰С‘ РїРѕСЃР»Рµ С‡РёСЃР»Р°
             throw invalid_argument(
-                "Некорректный ввод данных студента: возраст содержит лишние символы."
+                "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Р№ РІРІРѕРґ РґР°РЅРЅС‹С… СЃС‚СѓРґРµРЅС‚Р°: РІРѕР·СЂР°СЃС‚ СЃРѕРґРµСЂР¶РёС‚ Р»РёС€РЅРёРµ СЃРёРјРІРѕР»С‹."
             );
         }
     }
 
-    // --- разбираем средний балл ---
+    // --- СЂР°Р·Р±РёСЂР°РµРј СЃСЂРµРґРЅРёР№ Р±Р°Р»Р» ---
     {
         stringstream ss(gradeStr);
         if (!(ss >> grade)) {
             throw invalid_argument(
-                "Некорректный ввод данных студента: средний балл должен быть числом."
+                "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Р№ РІРІРѕРґ РґР°РЅРЅС‹С… СЃС‚СѓРґРµРЅС‚Р°: СЃСЂРµРґРЅРёР№ Р±Р°Р»Р» РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ С‡РёСЃР»РѕРј."
             );
         }
 
         char extra;
         if (ss >> extra) {
             throw invalid_argument(
-                "Некорректный ввод данных студента: средний балл содержит лишние символы."
+                "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Р№ РІРІРѕРґ РґР°РЅРЅС‹С… СЃС‚СѓРґРµРЅС‚Р°: СЃСЂРµРґРЅРёР№ Р±Р°Р»Р» СЃРѕРґРµСЂР¶РёС‚ Р»РёС€РЅРёРµ СЃРёРјРІРѕР»С‹."
             );
         }
     }
 
-    // проверка диапазона (0–120, 0–5)
+    // РїСЂРѕРІРµСЂРєР° РґРёР°РїР°Р·РѕРЅР° (0вЂ“120, 0вЂ“5)
     student.ValidateData(age, grade);
 
-    // если всё ок — сохраняем
+    // РµСЃР»Рё РІСЃС‘ РѕРє вЂ” СЃРѕС…СЂР°РЅСЏРµРј
     student.age = age;
     student.averageGrade = grade;
 
-    // подчистим хвост строки из основного cin
+    // РїРѕРґС‡РёСЃС‚РёРј С…РІРѕСЃС‚ СЃС‚СЂРѕРєРё РёР· РѕСЃРЅРѕРІРЅРѕРіРѕ cin
     is.ignore(numeric_limits<streamsize>::max(), '\n');
     return is;
 }
@@ -132,7 +132,7 @@ void Student::deserialize(istream& is) {
     is.read(reinterpret_cast<char*>(&age), sizeof(age));
     is.read(reinterpret_cast<char*>(&averageGrade), sizeof(averageGrade));
 
-    // Проверим, что из файла не прочитали бред
+    // РџСЂРѕРІРµСЂРёРј, С‡С‚Рѕ РёР· С„Р°Р№Р»Р° РЅРµ РїСЂРѕС‡РёС‚Р°Р»Рё Р±СЂРµРґ
     ValidateData(age, averageGrade);
 }
 
