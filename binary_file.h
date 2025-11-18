@@ -14,9 +14,9 @@ template<typename T>
 class BinaryFile : public fstream {
 private:
     struct FileHeader {
-        int  capacity;        // Размерность массива указателей
-        int  size;            // Текущее количество объектов
-        long pointersOffset;  // Смещение массива указателей
+        int  capacity;        // Р Р°Р·РјРµСЂРЅРѕСЃС‚СЊ РјР°СЃСЃРёРІР° СѓРєР°Р·Р°С‚РµР»РµР№
+        int  size;            // РўРµРєСѓС‰РµРµ РєРѕР»РёС‡РµСЃС‚РІРѕ РѕР±СЉРµРєС‚РѕРІ
+        long pointersOffset;  // РЎРјРµС‰РµРЅРёРµ РјР°СЃСЃРёРІР° СѓРєР°Р·Р°С‚РµР»РµР№
     };
 
     FileHeader header{};
@@ -48,7 +48,7 @@ private:
         fstream::flush();
     }
 
-    // Увеличение capacity в 2 раза и перенос массива указателей в конец файла
+    // РЈРІРµР»РёС‡РµРЅРёРµ capacity РІ 2 СЂР°Р·Р° Рё РїРµСЂРµРЅРѕСЃ РјР°СЃСЃРёРІР° СѓРєР°Р·Р°С‚РµР»РµР№ РІ РєРѕРЅРµС† С„Р°Р№Р»Р°
     void expandCapacity() {
         int newCapacity = header.capacity * 2;
 
@@ -62,7 +62,7 @@ private:
             newPointers[i] = -1;
         }
 
-        // переносим массив указателей в КОНЕЦ файла
+        // РїРµСЂРµРЅРѕСЃРёРј РјР°СЃСЃРёРІ СѓРєР°Р·Р°С‚РµР»РµР№ РІ РљРћРќР•Р¦ С„Р°Р№Р»Р°
         fstream::seekp(0, ios::end);
         header.pointersOffset = fstream::tellp();
         header.capacity = newCapacity;
@@ -95,7 +95,7 @@ private:
 public:
     BinaryFile(const string& fname) : filename(fname) {}
 
-    // Создание нового файла (обнуляем содержимое)
+    // РЎРѕР·РґР°РЅРёРµ РЅРѕРІРѕРіРѕ С„Р°Р№Р»Р° (РѕР±РЅСѓР»СЏРµРј СЃРѕРґРµСЂР¶РёРјРѕРµ)
     bool create() {
         fstream::open(filename, ios::out | ios::binary | ios::trunc);
         if (!is_open()) return false;
@@ -133,12 +133,12 @@ public:
             expandCapacity();
         }
 
-        // Пишем объект в конец файла
+        // РџРёС€РµРј РѕР±СЉРµРєС‚ РІ РєРѕРЅРµС† С„Р°Р№Р»Р°
         fstream::seekp(0, ios::end);
         long objectOffset = fstream::tellp();
         writeObject(obj);
 
-        // Обновляем массив указателей
+        // РћР±РЅРѕРІР»СЏРµРј РјР°СЃСЃРёРІ СѓРєР°Р·Р°С‚РµР»РµР№
         long* pointers = readPointersArray();
         pointers[header.size] = objectOffset;
         header.size++;
@@ -152,7 +152,7 @@ public:
 
     bool get(int index, T& obj) {
         if (index < 0 || index >= header.size) {
-            throw std::out_of_range("Индекс вне диапазона в BinaryFile::get");
+            throw std::out_of_range("РРЅРґРµРєСЃ РІРЅРµ РґРёР°РїР°Р·РѕРЅР° РІ BinaryFile::get");
         }
 
         long* pointers = readPointersArray();
@@ -160,7 +160,7 @@ public:
 
         if (objectOffset == -1) {
             delete[] pointers;
-            throw std::runtime_error("Объект помечен как удалён в BinaryFile::get");
+            throw std::runtime_error("РћР±СЉРµРєС‚ РїРѕРјРµС‡РµРЅ РєР°Рє СѓРґР°Р»С‘РЅ РІ BinaryFile::get");
         }
 
         fstream::seekg(objectOffset, ios::beg);
@@ -173,7 +173,7 @@ public:
 
     bool update(int index, const T& obj) {
         if (index < 0 || index >= header.size) {
-            throw std::out_of_range("Индекс вне диапазона в BinaryFile::update");
+            throw std::out_of_range("РРЅРґРµРєСЃ РІРЅРµ РґРёР°РїР°Р·РѕРЅР° РІ BinaryFile::update");
         }
 
         long* pointers = readPointersArray();
@@ -181,7 +181,7 @@ public:
 
         if (objectOffset == -1) {
             delete[] pointers;
-            throw std::runtime_error("Объект помечен как удалён в BinaryFile::update");
+            throw std::runtime_error("РћР±СЉРµРєС‚ РїРѕРјРµС‡РµРЅ РєР°Рє СѓРґР°Р»С‘РЅ РІ BinaryFile::update");
         }
 
         fstream::seekp(objectOffset, ios::beg);
@@ -194,7 +194,7 @@ public:
 
     bool remove(int index) {
         if (index < 0 || index >= header.size) {
-            throw std::out_of_range("Индекс вне диапазона в BinaryFile::remove");
+            throw std::out_of_range("РРЅРґРµРєСЃ РІРЅРµ РґРёР°РїР°Р·РѕРЅР° РІ BinaryFile::remove");
         }
 
         long* pointers = readPointersArray();
@@ -213,21 +213,21 @@ public:
     }
 
 
-    // Безопасная сортировка: читаем все objs, сортируем в памяти,
-    // пишем НОВЫЕ копии в конец файла и обновляем массив указателей
+    // Р‘РµР·РѕРїР°СЃРЅР°СЏ СЃРѕСЂС‚РёСЂРѕРІРєР°: С‡РёС‚Р°РµРј РІСЃРµ objs, СЃРѕСЂС‚РёСЂСѓРµРј РІ РїР°РјСЏС‚Рё,
+    // РїРёС€РµРј РќРћР’Р«Р• РєРѕРїРёРё РІ РєРѕРЅРµС† С„Р°Р№Р»Р° Рё РѕР±РЅРѕРІР»СЏРµРј РјР°СЃСЃРёРІ СѓРєР°Р·Р°С‚РµР»РµР№
     void sort() {
         if (header.size <= 1) return;
 
-        // 1) читаем объекты
+        // 1) С‡РёС‚Р°РµРј РѕР±СЉРµРєС‚С‹
         T* objects = new T[header.size];
         for (int i = 0; i < header.size; ++i) {
             get(i, objects[i]);
         }
 
-        // 2) сортируем
+        // 2) СЃРѕСЂС‚РёСЂСѓРµРј
         std::sort(objects, objects + header.size);
 
-        // 3) записываем в конец файла отсортированные копии
+        // 3) Р·Р°РїРёСЃС‹РІР°РµРј РІ РєРѕРЅРµС† С„Р°Р№Р»Р° РѕС‚СЃРѕСЂС‚РёСЂРѕРІР°РЅРЅС‹Рµ РєРѕРїРёРё
         fstream::seekp(0, ios::end);
         long* pointers = new long[header.capacity];
 
@@ -237,12 +237,12 @@ public:
             pointers[i] = pos;
         }
 
-        // остаток заполняем -1
+        // РѕСЃС‚Р°С‚РѕРє Р·Р°РїРѕР»РЅСЏРµРј -1
         for (int i = header.size; i < header.capacity; ++i) {
             pointers[i] = -1;
         }
 
-        // 4) записываем обновлённый массив указателей
+        // 4) Р·Р°РїРёСЃС‹РІР°РµРј РѕР±РЅРѕРІР»С‘РЅРЅС‹Р№ РјР°СЃСЃРёРІ СѓРєР°Р·Р°С‚РµР»РµР№
         writePointersArray(pointers);
         writeHeader();
 
@@ -251,7 +251,7 @@ public:
     }
 
     void displayAll() {
-        cout << "Всего объектов: " << header.size << endl;
+        cout << "Р’СЃРµРіРѕ РѕР±СЉРµРєС‚РѕРІ: " << header.size << endl;
         for (int i = 0; i < header.size; ++i) {
             T obj;
             if (get(i, obj)) {
