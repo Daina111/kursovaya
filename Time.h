@@ -8,10 +8,10 @@ private:
     int hours;
     int minutes;
     int seconds;
-    char* reminder;   // динамическая строка
+    char* reminder;   // РґРёРЅР°РјРёС‡РµСЃРєР°СЏ СЃС‚СЂРѕРєР°
 
     void copyReminder(const char* r);
-    void ValidateTime(int h, int m, int s);   // <-- твоя функция проверки
+    void ValidateTime(int h, int m, int s);   // <-- С‚РІРѕСЏ С„СѓРЅРєС†РёСЏ РїСЂРѕРІРµСЂРєРё
 
 public:
     Time();
@@ -21,13 +21,13 @@ public:
     Time& operator=(const Time& other);
     ~Time();
 
-    // сеттеры
+    // СЃРµС‚С‚РµСЂС‹
     void SetHours(int h);
     void SetMinutes(int m);
     void SetSeconds(int s);
     void SetReminder(const char* r);
 
-    // геттеры
+    // РіРµС‚С‚РµСЂС‹
     int GetHours()   const;
     int GetMinutes() const;
     int GetSeconds() const;
@@ -35,16 +35,16 @@ public:
 
     void Print() const;
 
-    // сравнение для сортировки
+    // СЃСЂР°РІРЅРµРЅРёРµ РґР»СЏ СЃРѕСЂС‚РёСЂРѕРІРєРё
     bool operator<(const Time& other) const;
     bool operator>(const Time& other) const;
     bool operator==(const Time& other) const;
 
-    // для BinaryFile
+    // РґР»СЏ BinaryFile
     void serialize(std::ostream& os) const;
     void deserialize(std::istream& is);
 
-    // ввод/вывод
+    // РІРІРѕРґ/РІС‹РІРѕРґ
     friend std::ostream& operator<<(std::ostream& os, const Time& t);
     friend std::istream& operator>>(std::istream& is, Time& t);
 };
